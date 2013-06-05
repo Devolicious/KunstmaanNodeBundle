@@ -130,7 +130,7 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
      */
     public function generateDeleteUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
     {
-        return $this->router->generate('KunstmaanNodeBundle_nodes_add', array(
+        return $this->router->generate('KunstmaanNodeBundle_nodes_delete', array(
             'id' => $node->getId()
         ));
     }
@@ -194,7 +194,7 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
      */
     public function generateCopyFromOtherLanguageUrl(Request $request, Node $node, $locale)
     {
-        return $this->router->generate('KunstmaanNodeBundle_nodes_revert', array(
+        return $this->router->generate('KunstmaanNodeBundle_nodes_copyfromotherlanguage', array(
             'id' => $node->getId(),
             'originallanguage' => $locale
         ));

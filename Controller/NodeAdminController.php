@@ -214,7 +214,7 @@ class NodeAdminController extends Controller
         /** @var HasNodeInterface $pageInstance */
         $pageInstance = new $type();
 
-        if ($pageInstance instanceof HasNodeInterface) {
+        if (!($pageInstance instanceof HasNodeInterface)) {
             throw new InvalidArgumentException('Please specify a type which implements the HasNodeInterface!');
         }
 

@@ -17,11 +17,9 @@
     <h1>{{ 'pages.pagenottranslated' | trans }}</h1>
     {% if copyfromotherlanguages %}
     <ul>
-        {% set copyFromOtherLanguageUrlGenerator = nodeAdminConfigurator.getCopyFromOtherLanguageUrlGenerator()  %}
         {% for nodeTranslation in nodeTranslations %}
             <li>{{ 'pages.copyfrom' | trans }} <a href="{{ nodeAdminConfigurator.generateCopyFromOtherLanguageUrl(app.request, node, nodeTranslation.lang) }}" class="translate">{{ nodeTranslation.lang }}</a> : {{ nodeTranslation.title }}</li>
         {% endfor %}
-        {% set createEmptyPageUrlGenerator = nodeAdminConfigurator.getCreateEmptyPageUrlGenerator()  %}
         <li><a href="{{ nodeAdminConfigurator.generateCreateEmptyPageUrl(app.request, node) }}" class="translate">{{ 'pages.createemptypage' | trans }}</a></li>
     </ul>
     {% else %}

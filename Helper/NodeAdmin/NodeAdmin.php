@@ -207,7 +207,8 @@ class NodeAdmin
                         'node' => $node,
                         'nodeTranslations' => $node->getNodeTranslations(true),
                         'nodemenu' => $nodeMenu,
-                        'copyfromotherlanguages' => $this->doParentsHaveTranslationForLanguage($node, $locale)
+                        'copyfromotherlanguages' => $this->doParentsHaveTranslationForLanguage($node, $locale),
+                        'nodeAdminConfigurator' => $this->configurator
                     )
                 )
             );
@@ -311,16 +312,16 @@ class NodeAdmin
     public function doCopyFromOtherLanguage(Request $request, Node $node)
     {
         $locale = $request->getLocale();
-        $otherLanguage = $request->get('originallanguage');
+        $otherLocale = $request->get('originallanguage');
 
-        list ($otherLanguagePage, $otherLanguageNodeTranslation, $otherLanguageNodeNodeVersion) = $this->getRelatedEntitiesFor($node, $locale);
+        list ($otherLanguagePage, $otherLanguageNodeTranslation, $otherLanguageNodeNodeVersion) = $this->getRelatedEntitiesFor($node, $otherLocale);
 
         $myLanguagePage = $this->cloneHelper->deepCloneAndSave($otherLanguagePage);
         /* @var NodeTranslation $nodeTranslation */
         $nodeTranslation = $this->getNodeTranslationRepository()->createNodeTranslationFor($myLanguagePage, $locale, $node, $this->user);
         $nodeVersion = $nodeTranslation->getPublicNodeVersion();
 
-        $this->eventDispatcher->dispatch(Events::COPY_PAGE_TRANSLATION, new CopyPageTranslationNodeEvent($node, $nodeTranslation, $nodeVersion, $myLanguagePage, $otherLanguageNodeTranslation, $otherLanguageNodeNodeVersion, $otherLanguagePage, $otherLanguage));
+        $this->eventDispatcher->dispatch(Events::COPY_PAGE_TRANSLATION, new CopyPageTranslationNodeEvent($node, $nodeTranslation, $nodeVersion, $myLanguagePage, $otherLanguageNodeTranslation, $otherLanguageNodeNodeVersion, $otherLanguagePage, $otherLocale));
 
         return new RedirectResponse($this->configurator->generateEditUrl($request, $myLanguagePage, $node, $nodeTranslation, $nodeVersion));
     }
@@ -346,7 +347,7 @@ class NodeAdmin
         $nodeTranslation = $this->getNodeTranslationRepository()->createNodeTranslationFor($myLanguagePage, $locale, $node, $this->user);
         $nodeVersion = $nodeTranslation->getPublicNodeVersion();
 
-        $this->dispatchNodeEvent(Events::ADD_EMPTY_PAGE_TRANSLATION, $node, $nodeTranslation, $nodeVersion, $entityName);
+        $this->dispatchNodeEvent(Events::ADD_EMPTY_PAGE_TRANSLATION, $node, $nodeTranslation, $nodeVersion, $myLanguagePage);
 
         return new RedirectResponse($this->configurator->generateEditUrl($request, $myLanguagePage, $node, $nodeTranslation, $nodeVersion));
     }
