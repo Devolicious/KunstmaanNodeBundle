@@ -3,8 +3,8 @@
 namespace Kunstmaan\NodeBundle\Helper\Menu;
 
 use Doctrine\ORM\EntityManager;
-use Kunstmaan\NodeBundle\Entity\PageInterface;
 
+use Kunstmaan\NodeBundle\Entity\PageInterface;
 use Kunstmaan\NodeBundle\Entity\NodeVersion;
 use Kunstmaan\AdminBundle\Helper\Security\Acl\Permission\PermissionMap;
 use Kunstmaan\NodeBundle\Event\ConfigureActionMenuEvent;
