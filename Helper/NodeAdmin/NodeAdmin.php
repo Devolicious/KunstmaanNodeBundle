@@ -215,7 +215,6 @@ class NodeAdmin
         }
 
         $nodeVersion = $nodeTranslation->getPublicNodeVersion();
-        $publicNodeVersion = $nodeVersion;
         $draftNodeVersion = $nodeTranslation->getNodeVersion('draft');
 
         /* @var HasNodeInterface $page */
@@ -341,15 +340,20 @@ class NodeAdmin
         $myLanguagePage = new $entityName();
         $myLanguagePage->setTitle($this->configurator->getDefaultTitle());
 
-        $this->em->persist($myLanguagePage);
-        $this->em->flush(); // @todo move flush createNodeTranslation also flushes
-        /* @var NodeTranslation $nodeTranslation */
-        $nodeTranslation = $this->getNodeTranslationRepository()->createNodeTranslationFor($myLanguagePage, $locale, $node, $this->user);
-        $nodeVersion = $nodeTranslation->getPublicNodeVersion();
+        /**
+         * @var HasNodeInterface $page
+         * @var Node             $node
+         * @var NodeTranslation  $nodeTranslation
+         */
+        list ($page, $node, $nodeTranslation, $nodeVersion) = $this->pageCreator->createPage($locale, $myLanguagePage, array(
+            'owner' => $this->user,
+            'node' => $node,
+            'page_setter' => $this->configurator->getNewPageInitializer()
+        ));
 
         $this->dispatchNodeEvent(Events::ADD_EMPTY_PAGE_TRANSLATION, $node, $nodeTranslation, $nodeVersion, $myLanguagePage);
 
-        return new RedirectResponse($this->configurator->generateEditUrl($request, $myLanguagePage, $node, $nodeTranslation, $nodeVersion));
+        return new RedirectResponse($this->configurator->generateEditUrl($request, $page, $node, $nodeTranslation, $nodeVersion));
     }
 
     /**

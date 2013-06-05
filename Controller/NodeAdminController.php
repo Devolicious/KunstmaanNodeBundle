@@ -87,92 +87,77 @@ class NodeAdminController extends Controller
     }
 
     /**
-     * @param int $id The node id
+     * @param Node $node
      *
      * @throws AccessDeniedException
      * @Route("/{id}/copyfromotherlanguage", requirements={"_method" = "GET", "id" = "\d+"}, name="KunstmaanNodeBundle_nodes_copyfromotherlanguage")
      *
      * @return Response
      */
-    public function copyFromOtherLanguageAction($id)
+    public function copyFromOtherLanguageAction(Node $node)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_EDIT);
-
         return $this->getNodeAdmin()->doCopyFromOtherLanguage($this->getRequest(), $node);
     }
 
     /**
-     * @param int $id
+     * @param Node $node
      *
      * @throws AccessDeniedException
      * @Route("/{id}/createemptypage", requirements={"_method" = "GET", "id" = "\d+"}, name="KunstmaanNodeBundle_nodes_createemptypage")
      *
      * @return Response
      */
-    public function createEmptyPageAction($id)
+    public function createEmptyPageAction(Node $node)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_EDIT);
-
         return $this->getNodeAdmin()->doCreateEmptyPage($this->getRequest(), $node);
     }
 
     /**
-     * @param int $id
+     * @param Node $node
      *
      * @throws AccessDeniedException
      * @Route("/{id}/publish", requirements={"_method" = "GET|POST", "id" = "\d+"}, name="KunstmaanNodeBundle_nodes_publish")
      *
      * @return Response
      */
-    public function publishAction($id)
+    public function publishAction(Node $node)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_PUBLISH);
-
         return $this->getNodeAdmin()->doPublish($this->getRequest(), $node);
     }
 
     /**
-     * @param int $id
+     * @param Node $node
      *
      * @throws AccessDeniedException
      * @Route("/{id}/unpublish", requirements={"_method" = "GET|POST", "id" = "\d+"}, name="KunstmaanNodeBundle_nodes_unpublish")
      *
      * @return Response
      */
-    public function unPublishAction($id)
+    public function unPublishAction(Node $node)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_UNPUBLISH);
-
         return $this->getNodeAdmin()->doUnPublish($this->getRequest(), $node);
     }
 
     /**
-     * @param int $id
+     * @param Node $node
      *
      * @throws AccessDeniedException
      * @Route("/{id}/delete", requirements={"_method" = "POST", "id" = "\d+"}, name="KunstmaanNodeBundle_nodes_delete")
      *
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction(Node $node)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_DELETE);
-
         return $this->getNodeAdmin()->doDelete($this->getRequest(), $node);
     }
 
     /**
-     * @param int $id The node id
+     * @param Node $node
      *
      * @throws AccessDeniedException
      * @throws InvalidArgumentException
@@ -180,17 +165,14 @@ class NodeAdminController extends Controller
      *
      * @return Response
      */
-    public function revertAction($id)
+    public function revertAction(Node $node)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_EDIT);
-
         return $this->getNodeAdmin()->doRevert($this->getRequest(), $node);
     }
 
     /**
-     * @param int $id
+     * @param Node $parentNode
      *
      * @throws AccessDeniedException
      * @throws InvalidArgumentException
@@ -198,10 +180,8 @@ class NodeAdminController extends Controller
      *
      * @return Response
      */
-    public function addAction($id)
+    public function addAction(Node $parentNode)
     {
-        /* @var Node $parentNode */
-        $parentNode = $this->getNodeRepository()->find($id);
         $this->checkPermission($parentNode, PermissionMap::PERMISSION_EDIT);
 
         $request = $this->getRequest();
@@ -227,7 +207,7 @@ class NodeAdminController extends Controller
     }
 
     /**
-     * @param int    $id        The node id
+     * @param Node   $node
      * @param string $subaction The subaction (draft|public)
      *
      * @throws AccessDeniedException
@@ -235,12 +215,9 @@ class NodeAdminController extends Controller
      *
      * @return Response
      */
-    public function editAction($id, $subaction)
+    public function editAction(Node $node, $subaction)
     {
-        /* @var Node $node */
-        $node = $this->getNodeRepository()->find($id);
         $this->checkPermission($node, PermissionMap::PERMISSION_EDIT);
-
        return $this->getNodeAdmin()->doEdit($this->getRequest(), $node, ($subaction == 'draft'));
     }
 
