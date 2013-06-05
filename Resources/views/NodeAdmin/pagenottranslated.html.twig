@@ -19,10 +19,10 @@
     <ul>
         {% set copyFromOtherLanguageUrlGenerator = nodeAdminConfigurator.getCopyFromOtherLanguageUrlGenerator()  %}
         {% for nodeTranslation in nodeTranslations %}
-            <li>{{ 'pages.copyfrom' | trans }} <a href="{{ copyFromOtherLanguageUrlGenerator(node, nodeTranslation.lang) }}" class="translate">{{ nodeTranslation.lang }}</a> : {{ nodeTranslation.title }}</li>
+            <li>{{ 'pages.copyfrom' | trans }} <a href="{{ nodeAdminConfigurator.generateCopyFromOtherLanguageUrl(app.request, node, nodeTranslation.lang) }}" class="translate">{{ nodeTranslation.lang }}</a> : {{ nodeTranslation.title }}</li>
         {% endfor %}
         {% set createEmptyPageUrlGenerator = nodeAdminConfigurator.getCreateEmptyPageUrlGenerator()  %}
-        <li><a href="{{ createEmptyPageUrlGenerator(node) }}" class="translate">{{ 'pages.createemptypage' | trans }}</a></li>
+        <li><a href="{{ nodeAdminConfigurator.generateCreateEmptyPageUrl(app.request, node) }}" class="translate">{{ 'pages.createemptypage' | trans }}</a></li>
     </ul>
     {% else %}
         {{ 'pages.copynotavailable' | trans }}

@@ -95,5 +95,5 @@ services:
         arguments: ["@doctrine.orm.entity_manager", "@event_dispatcher"]
 
     kunstmaan_node.node_admin.factory:
-        class: Kunstmaan\NodeBundle\NodeAdmin\NodeAdmin
+        class: Kunstmaan\NodeBundle\Helper\NodeAdmin\NodeAdminFactory
         arguments: ["@doctrine.orm.entity_manager", "@templating", "@form.factory", "@security.context", "@kunstmaan_admin.acl.helper", "@event_dispatcher", "@kunstmaan_admin.clone.helper", "@kunstmaan_node.page_creator", "@kunstmaan_admin.permission_creator", "%kunstmaan_node.version_timeout%"]

@@ -9,8 +9,7 @@
     </div>
     <div class="modal-footer">
         <div class="btn_group">
-            {% set unPublishUrlGenerator = nodeAdminConfigurator.getUnPublishUrlGenerator() %}
-            <a href="{{ unPublishUrlGenerator(page, node, nodeTranslation, nodeVersion) }}" class="btn btn-danger">Unpublish</a>
+            <a href="{{ nodeAdminConfigurator.generateUnPublishUrl(app.request, page, node, nodeTranslation, nodeVersion) }}" class="btn btn-danger">Unpublish</a>
             <button class="btn" data-dismiss="modal">Cancel</button>
         </div>
     </div>
@@ -26,8 +25,7 @@
     </div>
     <div class="modal-footer">
         <div class="btn_group">
-            {% set publishUrlGenerator = nodeAdminConfigurator.getPublishUrlGenerator() %}
-            <a href="{{ publishUrlGenerator(page, node, nodeTranslation, nodeVersion) }}" class="btn btn-danger">Publish</a>
+            <a href="{{ nodeAdminConfigurator.generatePublishUrl(app.request, page, node, nodeTranslation, nodeVersion) }}" class="btn btn-danger">Publish</a>
             <button class="btn" data-dismiss="modal">Cancel</button>
         </div>
     </div>
@@ -66,7 +64,6 @@
             </thead>
             <tbody>
             {% set publicVersion = nodeTranslation.getPublicNodeVersion() %}
-            {% set revertUrlGenerator = nodeAdminConfigurator.getRevertUrlGenerator() %}
             {% for oldNodeVersion in nodeVersions %}
                 <tr>
                     <td>{{ oldNodeVersion.type }}</td>
@@ -75,7 +72,7 @@
                     <td class="actions">
                         <a href="{{ path('_slug_preview', { 'url': nodeTranslation.url, 'version': oldNodeVersion.id }) }}" target="_blank"><i class="icon-eye-open"></i>Preview</a>
                         {% if (draftNodeVersion is null or oldNodeVersion.id != draftNodeVersion.id) and (publicVersion is null or oldNodeVersion.id != publicVersion.id) %}
-                            <a href="{{ revertUrlGenerator(page, node, nodeTranslation, nodeVersion, oldNodeVersion) }}"><i class="icon-refresh"></i>Revert</a>
+                            <a href="{{ nodeAdminConfigurator.generateRevertUrl(app.request, page, node, nodeTranslation, nodeVersion, oldNodeVersion) }}"><i class="icon-refresh"></i>Revert</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -92,8 +89,7 @@
             <button class="close" data-dismiss="modal">&times;</button>
             <h3>Add subpage</h3>
         </div>
-        {% set addUrlGenerator = nodeAdminConfigurator.getRevertUrlGenerator() %}
-        <form action="{{ addUrlGenerator(page, node, nodeTranslation, nodeVersion) }}" method="post" novalidate="novalidate">
+        <form action="{{ nodeAdminConfigurator.generateAddUrl(app.request, page, node, nodeTranslation, nodeVersion) }}" method="post" novalidate="novalidate">
             <div class="modal-body">
                 <div class="input_prop">
                     <label for="addpage_title">Title</label>
@@ -128,8 +124,7 @@
     </div>
     <div class="modal-footer">
         <div class="btn_group">
-            {% set deleteUrlGenerator = nodeAdminConfigurator.getRevertUrlGenerator() %}
-            <form action="{{ deleteUrlGenerator(page, node, nodeTranslation, nodeVersion) }}" method="post" novalidate="novalidate">
+            <form action="{{ nodeAdminConfigurator.generateDeleteUrl(app.request, page, node, nodeTranslation, nodeVersion) }}" method="post" novalidate="novalidate">
                 <input type="submit" name="submit" value="Delete" class="btn btn-danger" />
                 <button class="btn" data-dismiss="modal">Cancel</button>
             </form>

@@ -9,6 +9,7 @@ use Kunstmaan\NodeBundle\Entity\NodeVersion;
 use Kunstmaan\NodeBundle\Helper\Menu\ActionsMenuBuilder;
 use Kunstmaan\NodeBundle\Helper\Tabs\TabPane;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -73,184 +74,178 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
 
     /**
      * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $nodeVersion
-     * )
-     */
-    public function getEditUrlGenerator()
-    {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_edit', array(
-                'id' => $node->getId(),
-                'subaction' => $nodeVersion != $nodeTranslation->getPublicNodeVersion() ? 'draft' : 'public'
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $nodeVersion
-     * )
-     */
-    public function getAddUrlGenerator()
-    {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_add', array(
-                'id' => $node->getId()
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $nodeVersion
-     * )
-     */
-    public function getDeleteUrlGenerator()
-    {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_add', array(
-                'id' => $node->getId()
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $nodeVersion
-     * )
-     */
-    public function getUnPublishUrlGenerator()
-    {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_unpublish', array(
-                'id' => $node->getId()
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $nodeVersion
-     * )
-     */
-    public function getPublishUrlGenerator()
-    {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_publish', array(
-                'id' => $node->getId()
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $currentNodeVersion
-     *   @param NodeVersion $revertToNodeVersion
-     * )
-     */
-    public function getRevertUrlGenerator()
-    {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $currentNodeVersion, NodeVersion $revertToNodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_revert', array(
-                'id' => $node->getId(),
-                'version' => $revertToNodeVersion->getId()
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param Node $node
-     *   @param string $locale
-     * )
-     */
-    public function getCopyFromOtherLanguageUrlGenerator()
-    {
-        $router = $this->router;
-        return function(Node $node, $locale) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_revert', array(
-                'id' => $node->getId(),
-                'originallanguage' => $locale
-            ));
-        };
-    }
-
-    /**
-     * @return Callable(
-     *   @param Node $node
+     *   @param Request $request
+     *   @param Node    $node
      * )
      */
     public function getCreateEmptyPageUrlGenerator()
     {
         $router = $this->router;
-        return function(Node $node) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_createemptypage', array(
-                'id' => $node->getId()
-            ));
+        return function(Request $request, Node $node) use ($router) {
+
         };
     }
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node $node
-     *   @param NodeTranslation $nodeTranslation
-     *   @param NodeVersion $nodeVersion
-     *   @param TabPane $tabPane
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getSuccessfulEditUrlGenerator()
+    public function generateEditUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
     {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion, TabPane $tabPane) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_edit', array_merge(array(
-                'id' => $node->getId(),
-                'subaction' => $nodeVersion != $nodeTranslation->getPublicNodeVersion() ? 'draft' : 'public',
-                'currenttab' => $tabPane->getActiveTab()
-            ), $tabPane->getExtraParams($request)));
-        };
+        return $this->router->generate('KunstmaanNodeBundle_nodes_edit', array(
+            'id' => $node->getId(),
+            'subaction' => $nodeVersion != $nodeTranslation->getPublicNodeVersion() ? 'draft' : 'public'
+        ));
     }
 
     /**
-     * @return Callable(
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
+     */
+    public function generateAddUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_add', array(
+            'id' => $node->getId()
+        ));
+    }
+
+    /**
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
+     */
+    public function generateDeleteUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_add', array(
+            'id' => $node->getId()
+        ));
+    }
+
+    /**
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
+     */
+    public function generateUnPublishUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_unpublish', array(
+            'id' => $node->getId()
+        ));
+    }
+
+    /**
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
+     */
+    public function generatePublishUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_publish', array(
+            'id' => $node->getId()
+        ));
+    }
+
+    /**
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $currentNodeVersion
+     * @param NodeVersion      $revertToNodeVersion
+     *
+     * @return string
+     */
+    public function generateRevertUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $currentNodeVersion, NodeVersion $revertToNodeVersion)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_revert', array(
+            'id' => $node->getId(),
+            'version' => $revertToNodeVersion->getId()
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param Node    $node
+     * @param string  $locale
+     *
+     * @return string
+     */
+    public function generateCopyFromOtherLanguageUrl(Request $request, Node $node, $locale)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_revert', array(
+            'id' => $node->getId(),
+            'originallanguage' => $locale
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param Node    $node
+     *
+     * @return string
+     */
+    public function generateCreateEmptyPageUrl(Request $request, Node $node)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_createemptypage', array(
+            'id' => $node->getId()
+        ));
+    }
+
+    /**
+     * @param Request $request
      * @param HasNodeInterface $page
      * @param Node $node
      * @param NodeTranslation $nodeTranslation
      * @param NodeVersion $nodeVersion
-     * )
+     * @param TabPane $tabPane
+     *
+     * @return string
      */
-    public function getAfterDeleteUrlGenerator()
+    public function generateAfterSuccessfulEditUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion, TabPane $tabPane)
     {
-        $router = $this->router;
-        return function(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion) use ($router) {
-            return $router->generate('KunstmaanNodeBundle_nodes_publish', array(
-                'id' => $node->getParent()->getId()
-            ));
-        };
+        return $this->router->generate('KunstmaanNodeBundle_nodes_edit', array_merge(array(
+            'id' => $node->getId(),
+            'subaction' => $nodeVersion != $nodeTranslation->getPublicNodeVersion() ? 'draft' : 'public',
+            'currenttab' => $tabPane->getActiveTab()
+        ), $tabPane->getExtraParams($request)));
+    }
+
+    /**
+     * @param Request $request
+     * @param HasNodeInterface $page
+     * @param Node $node
+     * @param NodeTranslation $nodeTranslation
+     * @param NodeVersion $nodeVersion
+     *
+     * @return string
+     */
+    public function generateAfterSuccessfulDeleteUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
+    {
+        return $this->router->generate('KunstmaanNodeBundle_nodes_publish', array(
+            'id' => $node->getParent()->getId()
+        ));
     }
 
     /**

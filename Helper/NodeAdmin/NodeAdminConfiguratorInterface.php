@@ -7,6 +7,7 @@ use Kunstmaan\NodeBundle\Entity\Node;
 use Kunstmaan\NodeBundle\Entity\NodeTranslation;
 use Kunstmaan\NodeBundle\Entity\NodeVersion;
 use Kunstmaan\NodeBundle\Helper\Tabs\TabPane;
+use Symfony\Component\HttpFoundation\Request;
 
 interface NodeAdminConfiguratorInterface
 {
@@ -40,102 +41,111 @@ interface NodeAdminConfiguratorInterface
     public function getActionsMenuAlias();
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getEditUrlGenerator();
+    public function generateEditUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getAddUrlGenerator();
+    public function generateAddUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getDeleteUrlGenerator();
+    public function generateDeleteUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getUnPublishUrlGenerator();
+    public function generateUnPublishUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getPublishUrlGenerator();
+    public function generatePublishUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $currentNodeVersion
-     *   @param NodeVersion      $revertToNodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $currentNodeVersion
+     * @param NodeVersion      $revertToNodeVersion
+     *
+     * @return string
      */
-    public function getRevertUrlGenerator();
+    public function generateRevertUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $currentNodeVersion, NodeVersion $revertToNodeVersion);
 
     /**
-     * @return Callable(
-     *   @param Node   $node
-     *   @param string $locale
-     * )
+     * @param Request $request
+     * @param Node    $node
+     * @param string  $locale
+     *
+     * @return string
      */
-    public function getCopyFromOtherLanguageUrlGenerator();
+    public function generateCopyFromOtherLanguageUrl(Request $request, Node $node, $locale);
 
     /**
-     * @return Callable(
-     *   @param Node $node
-     * )
+     * @param Request $request
+     * @param Node    $node
+     *
+     * @return string
      */
-    public function getCreateEmptyPageUrlGenerator();
+    public function generateCreateEmptyPageUrl(Request $request, Node $node);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     *   @param TabPane          $tabPane
-     *   @param boolean          $draft
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     * @param TabPane          $tabPane
+     *
+     * @return string
      */
-    public function getSuccessfulEditUrlGenerator();
+    public function generateAfterSuccessfulEditUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion, TabPane $tabPane);
 
     /**
-     * @return Callable(
-     *   @param HasNodeInterface $page
-     *   @param Node             $node
-     *   @param NodeTranslation  $nodeTranslation
-     *   @param NodeVersion      $nodeVersion
-     * )
+     * @param Request          $request
+     * @param HasNodeInterface $page
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     *
+     * @return string
      */
-    public function getAfterDeleteUrlGenerator();
+    public function generateAfterSuccessfulDeleteUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
      * @return null|Callable(

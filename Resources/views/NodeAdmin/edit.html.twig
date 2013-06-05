@@ -31,21 +31,19 @@
     {% endif %}
 {% endblock %}
 
-{% set editUrlGenerator = nodeAdminConfigurator.getEditUrlGenerator()  %}
-
 {% block header %}
     {% if adminmenu.current %}
         <h1>
             {{ adminmenu.current.internalname | trans }}
             {% if draft %}
                 <small>
-                    Draft version (Go to <a href="{{ editUrlGenerator(page, node, nodeTranslation, nodeTranslation.getPublicNodeVersion()) }}">public version</a>)
+                    Draft version (Go to <a href="{{ nodeAdminConfigurator.generateEditUrl(app.request, page, node, nodeTranslation, nodeTranslation.getPublicNodeVersion()) }}">public version</a>)
                 </small>
             {% else %}
                 <small>
                     Public version
                     {% if draftNodeVersion is not null %}
-                        (Go to <a href="{{ editUrlGenerator(page, node, nodeTranslation, draftNodeVersion) }}">draft version</a>)
+                        (Go to <a href="{{ nodeAdminConfigurator.generateEditUrl(app.request, page, node, nodeTranslation, draftNodeVersion) }}">draft version</a>)
                     {% endif %}
                 </small>
             {% endif %}
@@ -56,7 +54,7 @@
 
 
 {% block content %}
-    <form id="pageadminform" class="form-horizontal" action="{{ editUrlGenerator(page, node, nodeTranslation, nodeVersion) }}" method="post" {{ form_enctype(form) }} novalidate="novalidate">
+    <form id="pageadminform" class="form-horizontal" action="{{ nodeAdminConfigurator.generateEditUrl(app.request, page, node, nodeTranslation, nodeVersion) }}" method="post" {{ form_enctype(form) }} novalidate="novalidate">
 
         {{ knp_menu_render(nodeAdminConfigurator.getSubActionsMenuAlias(), { 'template': 'KunstmaanNodeBundle:Menu:knp_menu_actions.html.twig'}) }}
         {{ knp_menu_render(nodeAdminConfigurator.getActionsMenuAlias(), { 'template': 'KunstmaanNodeBundle:Menu:knp_menu_actions.html.twig'}) }}

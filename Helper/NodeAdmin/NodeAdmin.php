@@ -181,8 +181,7 @@ class NodeAdmin
 
         $this->permissionCreator->initByExample($node, $parentNode);
 
-        $editUrlGenerator = $this->configurator->getEditUrlGenerator();
-        return new RedirectResponse($editUrlGenerator($page, $node, $nodeTranslation, $nodeVersion));
+        return new RedirectResponse($this->configurator->generateEditUrl($request, $page, $node, $nodeTranslation, $nodeVersion));
     }
 
     /**
@@ -273,8 +272,7 @@ class NodeAdmin
                     $session->getFlashBag()->add('success', 'Page has been edited!');
                 }
 
-                $successfulEditUrlGenerator = $this->configurator->getSuccessfulEditUrlGenerator();
-                return new RedirectResponse($successfulEditUrlGenerator($page, $node, $nodeTranslation, $nodeVersion, $tabPane, $draft));
+                return new RedirectResponse($this->configurator->generateAfterSuccessfulEditUrl($request, $page, $node, $nodeTranslation, $nodeVersion, $tabPane, $draft));
             }
         }
 
@@ -284,7 +282,7 @@ class NodeAdmin
 
         return new Response(
             $this->renderer->render(
-                'KunstmaanNodeBundle:NodeAdmin:edit',
+                'KunstmaanNodeBundle:NodeAdmin:edit.html.twig',
                 array(
                     'topnodes' => $topNodes, // this should be done by a listener?
                     'page' => $page,
@@ -324,8 +322,7 @@ class NodeAdmin
 
         $this->eventDispatcher->dispatch(Events::COPY_PAGE_TRANSLATION, new CopyPageTranslationNodeEvent($node, $nodeTranslation, $nodeVersion, $myLanguagePage, $otherLanguageNodeTranslation, $otherLanguageNodeNodeVersion, $otherLanguagePage, $otherLanguage));
 
-        $editUrlGenerator = $this->configurator->getEditUrlGenerator();
-        return new RedirectResponse($editUrlGenerator($myLanguagePage, $node, $nodeTranslation, $nodeVersion));
+        return new RedirectResponse($this->configurator->generateEditUrl($request, $myLanguagePage, $node, $nodeTranslation, $nodeVersion));
     }
 
     /**
@@ -351,8 +348,7 @@ class NodeAdmin
 
         $this->dispatchNodeEvent(Events::ADD_EMPTY_PAGE_TRANSLATION, $node, $nodeTranslation, $nodeVersion, $entityName);
 
-        $editUrlGenerator = $this->configurator->getEditUrlGenerator();
-        return new RedirectResponse($editUrlGenerator($myLanguagePage, $node, $nodeTranslation, $nodeVersion));
+        return new RedirectResponse($this->configurator->generateEditUrl($request, $myLanguagePage, $node, $nodeTranslation, $nodeVersion));
     }
 
     /**
@@ -406,8 +402,7 @@ class NodeAdmin
             $session->getFlashBag()->add('success', 'Page has been deleted!');
         }
 
-        $afterDeleteUrlGenerator = $this->configurator->getAfterDeleteUrlGenerator();
-        return new RedirectResponse($afterDeleteUrlGenerator($page, $node, $nodeTranslation, $nodeVersion));
+        return new RedirectResponse($this->configurator->generateAfterSuccessfulDeleteUrl($request, $page, $node, $nodeTranslation, $nodeVersion));
     }
 
     /**
@@ -450,8 +445,7 @@ class NodeAdmin
             $session->getFlashBag()->add('success', 'Page has been reverted!');
         }
 
-        $editUrlGenerator = $this->configurator->getEditUrlGenerator();
-        return new RedirectResponse($editUrlGenerator($clonedPage, $node, $nodeTranslation, $newNodeVersion));
+        return new RedirectResponse($this->configurator->generateEditUrl($request, $clonedPage, $node, $nodeTranslation, $newNodeVersion));
     }
 
     /**
@@ -538,8 +532,7 @@ class NodeAdmin
             $session->getFlashBag()->add('success', $flashMessage);
         }
 
-        $editUrlGenerator = $this->configurator->getEditUrlGenerator();
-        return new RedirectResponse($editUrlGenerator($page, $node, $nodeTranslation, $nodeVersion));
+        return new RedirectResponse($this->configurator->generateEditUrl($request, $page, $node, $nodeTranslation, $nodeVersion));
     }
 
     /**
@@ -553,7 +546,7 @@ class NodeAdmin
     private function createPublicVersion(HasNodeInterface $page, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion, $publish = true)
     {
         $newPublicPage = $this->cloneHelper->deepCloneAndSave($page);
-        $nodeVersion = $this->em->getRepository('KunstmaanNodeBundle:NodeVersion')->createNodeVersionFor($newPublicPage, $nodeTranslation, $this->user, $nodeVersion);
+        $nodeVersion = $this->getNodeVersionRepository()->createNodeVersionFor($newPublicPage, $nodeTranslation, $this->user, $nodeVersion);
         $nodeTranslation->setPublicNodeVersion($nodeVersion);
         $nodeTranslation->setTitle($newPublicPage->getTitle());
         if ($publish) {
