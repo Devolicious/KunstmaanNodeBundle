@@ -65,7 +65,7 @@ class LogPageEventsSubscriber implements EventSubscriberInterface
     {
         return array(
             Events::COPY_PAGE_TRANSLATION => 'onCopyPageTranslation',
-            Events::ADD_EMPTY_PAGE_TRANSLATION => 'onAddEmptyPageTranslation',
+            Events::ADD_NODE_TRANSLATION => 'onAddEmptyPageTranslation',
             Events::POST_PUBLISH => 'postPublish',
             Events::POST_UNPUBLISH => 'postUnPublish',
             Events::POST_DELETE => 'postDelete',

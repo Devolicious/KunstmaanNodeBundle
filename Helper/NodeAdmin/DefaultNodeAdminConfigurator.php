@@ -20,8 +20,15 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
      */
     private $menuBuilder;
 
+    /**
+     * @var RouterInterface
+     */
     private $router;
 
+    /**
+     * @param ActionsMenuBuilder $menuBuilder
+     * @param RouterInterface    $router
+     */
     public function __construct(ActionsMenuBuilder $menuBuilder, RouterInterface $router)
     {
         $this->menuBuilder = $menuBuilder;
@@ -38,9 +45,9 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
 
     /**
      * @param HasNodeInterface $page
-     * @param Node $node
-     * @param NodeTranslation $nodeTranslation
-     * @param NodeVersion $nodeVersion
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
      */
     public function initActionsMenu(HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion)
     {
@@ -70,20 +77,6 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
     public function getActionsMenuAlias()
     {
         return 'actions';
-    }
-
-    /**
-     * @return Callable(
-     *   @param Request $request
-     *   @param Node    $node
-     * )
-     */
-    public function getCreateEmptyPageUrlGenerator()
-    {
-        $router = $this->router;
-        return function(Request $request, Node $node) use ($router) {
-
-        };
     }
 
     /**
@@ -214,12 +207,12 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
     }
 
     /**
-     * @param Request $request
+     * @param Request          $request
      * @param HasNodeInterface $page
-     * @param Node $node
-     * @param NodeTranslation $nodeTranslation
-     * @param NodeVersion $nodeVersion
-     * @param TabPane $tabPane
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
+     * @param TabPane          $tabPane
      *
      * @return string
      */
@@ -233,11 +226,11 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
     }
 
     /**
-     * @param Request $request
+     * @param Request          $request
      * @param HasNodeInterface $page
-     * @param Node $node
-     * @param NodeTranslation $nodeTranslation
-     * @param NodeVersion $nodeVersion
+     * @param Node             $node
+     * @param NodeTranslation  $nodeTranslation
+     * @param NodeVersion      $nodeVersion
      *
      * @return string
      */
