@@ -217,7 +217,7 @@ class NodeAdminController extends Controller
      */
     public function editAction(Node $node, $subaction)
     {
-        $this->checkPermission($node, PermissionMap::PERMISSION_EDIT);
+       $this->checkPermission($node, PermissionMap::PERMISSION_EDIT);
        return $this->getNodeAdmin()->doEdit($this->getRequest(), $node, ($subaction == 'draft'));
     }
 
