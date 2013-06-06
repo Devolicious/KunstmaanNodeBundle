@@ -16,6 +16,13 @@ class Events
     const ADD_NODE = 'kunstmaan_node.addNode';
 
     /**
+     * The addNodeTranslation event occurs for a given node, after a new node translation is created.
+     *
+     * @var string
+     */
+    const ADD_NODE_TRANSLATION = 'kunstmaan_node.addNodeTranslation';
+
+    /**
      * The addNode event occurs for a given node, after it's being reverted to a previous version.
      *
      * @var string
@@ -105,13 +112,6 @@ class Events
      * @var string
      */
     const COPY_PAGE_TRANSLATION = 'kunstmaan_node.copyPageTranslation';
-
-    /**
-     * The emptyPageTranslation event occurs for a given node, after a new page translation is created.
-     *
-     * @var string
-     */
-    const ADD_EMPTY_PAGE_TRANSLATION = 'kunstmaan_node.emptyPageTranslation';
 
     /**
      * This event will be triggered when creating the menu for the page sub actions.

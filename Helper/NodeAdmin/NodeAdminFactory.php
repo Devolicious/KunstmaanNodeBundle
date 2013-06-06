@@ -58,11 +58,6 @@ class NodeAdminFactory
     private $pageCreator;
 
     /**
-     * @var ACLPermissionCreator
-     */
-    private $permissionCreator;
-
-    /**
      * @var integer
      */
     private $nodeVersionTimeout;
@@ -76,7 +71,6 @@ class NodeAdminFactory
      * @param EventDispatcherInterface $eventDispatcher
      * @param CloneHelper              $cloneHelper
      * @param PageCreator              $pageCreator
-     * @param ACLPermissionCreator     $permissionCreator
      * @param integer                  $nodeVersionTimeout
      */
     public function __construct(
@@ -88,7 +82,6 @@ class NodeAdminFactory
         EventDispatcherInterface $eventDispatcher,
         CloneHelper $cloneHelper,
         PageCreator $pageCreator,
-        ACLPermissionCreator $permissionCreator,
         $nodeVersionTimeout
     )
     {
@@ -100,7 +93,6 @@ class NodeAdminFactory
         $this->eventDispatcher = $eventDispatcher;
         $this->cloneHelper = $cloneHelper;
         $this->pageCreator = $pageCreator;
-        $this->permissionCreator = $permissionCreator;
         $this->nodeVersionTimeout = $nodeVersionTimeout;
     }
 
@@ -111,7 +103,7 @@ class NodeAdminFactory
      */
     public function createNodeAdmin(NodeAdminConfiguratorInterface $configurator)
     {
-        return new NodeAdmin($configurator, $this->em, $this->renderer, $this->formFactory, $this->securityContext, $this->aclHelper, $this->eventDispatcher, $this->cloneHelper, $this->pageCreator, $this->permissionCreator, $this->nodeVersionTimeout);
+        return new NodeAdmin($configurator, $this->em, $this->renderer, $this->formFactory, $this->securityContext, $this->aclHelper, $this->eventDispatcher, $this->cloneHelper, $this->pageCreator, $this->nodeVersionTimeout);
     }
 
 }

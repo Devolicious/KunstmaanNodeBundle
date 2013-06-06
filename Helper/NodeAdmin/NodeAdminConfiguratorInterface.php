@@ -148,11 +148,8 @@ interface NodeAdminConfiguratorInterface
     public function generateAfterSuccessfulDeleteUrl(Request $request, HasNodeInterface $page, Node $node, NodeTranslation $nodeTranslation, NodeVersion $nodeVersion);
 
     /**
-     * @return null|Callable(
-     *   @param HasNodeInterface $page
-     *   @param string           $locale
-     * )
+     * @return array
      */
-    public function getNewPageInitializer();
+    public function getPageCreatorOptions();
 
 }

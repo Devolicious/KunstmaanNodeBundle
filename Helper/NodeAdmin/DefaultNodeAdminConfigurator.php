@@ -249,13 +249,10 @@ class DefaultNodeAdminConfigurator implements NodeAdminConfiguratorInterface {
     }
 
     /**
-     * @return null|Callable(
-     *   @param HasNodeInterface $page
-     *   @param string $locale
-     * )
+     * @return array
      */
-    public function getNewPageInitializer()
+    public function getPageCreatorOptions()
     {
-        return null;
+        return array();
     }
 }

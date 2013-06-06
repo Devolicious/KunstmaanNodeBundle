@@ -77,6 +77,8 @@ class PageCreator
         $node = $options['node'];
         $online = $options['online'];
         $internalName = $options['internal_name'];
+        $newNode = false;
+        $newNodeTranslation = false;
 
         $newPage = clone $pageInstance;
         if (is_callable($options['page_setter'])) {
@@ -99,10 +101,13 @@ class PageCreator
         if (is_null($node)) {
             $node = $this->getNodeRepository()->createNodeFor($newPage, $locale, $owner, $internalName);
             $nodeTranslation = $node->getNodeTranslation($locale, true);
+            $newNode = true;
+            $newNodeTranslation = true;
         } else if ($node instanceof Node) {
             $nodeTranslation = $node->getNodeTranslation($locale, true);
             if (is_null($nodeTranslation)) {
                 $nodeTranslation = $this->getNodeTranslationRepository()->createNodeTranslationFor($newPage, $locale, $node, $owner);
+                $newNodeTranslation = true;
             }
         } else {
             throw new \InvalidArgumentException('Node should null or an instanceof Node');
@@ -131,7 +136,13 @@ class PageCreator
 
         $nodeVersion = $nodeTranslation->getPublicNodeVersion();
 
-        $this->eventDispatcher->dispatch(Events::ADD_NODE, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
+        if ($newNode) {
+            $this->eventDispatcher->dispatch(Events::ADD_NODE, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
+        }
+
+        if ($newNodeTranslation) {
+            $this->eventDispatcher->dispatch(Events::ADD_NODE_TRANSLATION, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
+        }
 
         return array($newPage, $node, $nodeTranslation, $nodeVersion);
     }

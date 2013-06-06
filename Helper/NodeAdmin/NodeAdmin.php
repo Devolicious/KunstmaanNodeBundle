@@ -90,11 +90,6 @@ class NodeAdmin
     private $pageCreator;
 
     /**
-     * @var ACLPermissionCreator
-     */
-    private $permissionCreator;
-
-    /**
      * @var integer
      */
     private $nodeVersionTimeout;
@@ -116,7 +111,6 @@ class NodeAdmin
      * @param EventDispatcherInterface       $eventDispatcher
      * @param CloneHelper                    $cloneHelper
      * @param PageCreator                    $pageCreator
-     * @param ACLPermissionCreator           $permissionCreator
      * @param integer                        $nodeVersionTimeout
      */
     public function __construct(
@@ -129,7 +123,6 @@ class NodeAdmin
         EventDispatcherInterface $eventDispatcher,
         CloneHelper $cloneHelper,
         PageCreator $pageCreator,
-        ACLPermissionCreator $permissionCreator,
         $nodeVersionTimeout
     )
     {
@@ -142,7 +135,6 @@ class NodeAdmin
         $this->eventDispatcher = $eventDispatcher;
         $this->cloneHelper = $cloneHelper;
         $this->pageCreator = $pageCreator;
-        $this->permissionCreator = $permissionCreator;
         $this->nodeVersionTimeout = $nodeVersionTimeout; // Maybe this should be part of the configuration
 
         $this->user = $securityContext->getToken()->getUser();
@@ -173,13 +165,13 @@ class NodeAdmin
          * @var Node             $node
          * @var NodeTranslation  $nodeTranslation
          */
-        list ($page, $node, $nodeTranslation, $nodeVersion) = $this->pageCreator->createPage($locale, $pageInstance, array(
-            'owner' => $this->user,
-            'parent' => $parentPage,
-            'page_setter' => $this->configurator->getNewPageInitializer()
+        list ($page, $node, $nodeTranslation, $nodeVersion) = $this->pageCreator->createPage(
+            $locale, $pageInstance,
+            array_merge($this->configurator->getPageCreatorOptions(), array(
+                'owner' => $this->user,
+                'parent' => $parentPage,
+            )
         ));
-
-        $this->permissionCreator->initByExample($node, $parentNode);
 
         return new RedirectResponse($this->configurator->generateEditUrl($request, $page, $node, $nodeTranslation, $nodeVersion));
     }
@@ -345,13 +337,13 @@ class NodeAdmin
          * @var Node             $node
          * @var NodeTranslation  $nodeTranslation
          */
-        list ($page, $node, $nodeTranslation, $nodeVersion) = $this->pageCreator->createPage($locale, $myLanguagePage, array(
-            'owner' => $this->user,
-            'node' => $node,
-            'page_setter' => $this->configurator->getNewPageInitializer()
+        list ($page, $node, $nodeTranslation, $nodeVersion) = $this->pageCreator->createPage(
+            $locale, $myLanguagePage,
+            array_merge($this->configurator->getPageCreatorOptions(), array(
+                'owner' => $this->user,
+                'node' => $node
+            )
         ));
-
-        $this->dispatchNodeEvent(Events::ADD_EMPTY_PAGE_TRANSLATION, $node, $nodeTranslation, $nodeVersion, $myLanguagePage);
 
         return new RedirectResponse($this->configurator->generateEditUrl($request, $page, $node, $nodeTranslation, $nodeVersion));
     }
