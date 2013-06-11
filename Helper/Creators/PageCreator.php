@@ -63,6 +63,7 @@ class PageCreator
             'page_setter' => null,
             'node_setter' => null,
             'node_translation_setter' => null,
+            'disable_events' => false
         ), $options);
 
         if (is_null($options['owner'])) {
@@ -77,6 +78,7 @@ class PageCreator
         $node = $options['node'];
         $online = $options['online'];
         $internalName = $options['internal_name'];
+        $disableEvents = $options['disable_events'];
         $newNode = false;
         $newNodeTranslation = false;
 
@@ -136,12 +138,14 @@ class PageCreator
 
         $nodeVersion = $nodeTranslation->getPublicNodeVersion();
 
-        if ($newNode) {
-            $this->eventDispatcher->dispatch(Events::ADD_NODE, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
-        }
+        if (!$disableEvents) {
+            if ($newNode) {
+                $this->eventDispatcher->dispatch(Events::ADD_NODE, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
+            }
 
-        if ($newNodeTranslation) {
-            $this->eventDispatcher->dispatch(Events::ADD_NODE_TRANSLATION, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
+            if ($newNodeTranslation) {
+                $this->eventDispatcher->dispatch(Events::ADD_NODE_TRANSLATION, new NodeEvent($node, $nodeTranslation, $nodeVersion, $newPage));
+            }
         }
 
         return array($newPage, $node, $nodeTranslation, $nodeVersion);
@@ -160,7 +164,7 @@ class PageCreator
     public function createMultiLanguagePage(HasNodeInterface $translationInstance, $locales, $options)
     {
         $result = array();
-        $baseNode = null;
+        $baseNode = $options['node'];
 
         foreach ($locales as $locale) {
             list ($page, $node, $nodeTranslation, $nodeVersion) = $this->createPage($locale, $translationInstance, array_merge(array(

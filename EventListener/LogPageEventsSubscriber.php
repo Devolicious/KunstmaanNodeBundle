@@ -80,7 +80,10 @@ class LogPageEventsSubscriber implements EventSubscriberInterface
     private function getUser()
     {
         if (is_null($this->user)) {
-            $this->user = $this->securityContext->getToken()->getUser();
+            $token = $this->securityContext->getToken();
+            if (!is_null($token)) {
+                $this->user = $token->getUser();
+            }
         }
 
         return $this->user;
@@ -93,7 +96,13 @@ class LogPageEventsSubscriber implements EventSubscriberInterface
 
     public function onAddEmptyPageTranslation(NodeEvent $event)
     {
-        $this->logger->addInfo(sprintf('%s just added an empty page translation (%d) for node with id %d in language %s', $this->getUser()->getUsername(), $event->getNodeTranslation()->getId(), $event->getNode()->getId(), $event->getNodeTranslation()->getLang()));
+        $user = $this->getUser();
+        if (is_null($user)) {
+            $username = $event->getNodeVersion()->getOwner(); // when executing via Commands you don't have a user, use the owner then
+        } else {
+            $username = $user->getUsername();
+        }
+        $this->logger->addInfo(sprintf('%s just added an empty page translation (%d) for node with id %d in language %s', $username, $event->getNodeTranslation()->getId(), $event->getNode()->getId(), $event->getNodeTranslation()->getLang()));
     }
 
     public function postPublish(NodeEvent $event)
@@ -113,7 +122,13 @@ class LogPageEventsSubscriber implements EventSubscriberInterface
 
     public function onAddNode(NodeEvent $event)
     {
-        $this->logger->addInfo(sprintf('%s just added node with id %d in language %s', $this->getUser()->getUsername(), $event->getNode()->getId(), $event->getNodeTranslation()->getLang()));
+        $user = $this->getUser();
+        if (is_null($user)) {
+            $username = $event->getNodeVersion()->getOwner(); // when executing via Commands you don't have a user, use the owner then
+        } else {
+            $username = $user->getUsername();
+        }
+        $this->logger->addInfo(sprintf('%s just added node with id %d in language %s', $username, $event->getNode()->getId(), $event->getNodeTranslation()->getLang()));
     }
 
     public function postPersist(NodeEvent $event)
