@@ -237,9 +237,10 @@ class NodeAdmin
 
                 $nodeVersion = $this->createNewVersionIfOutdated($nodeVersion, $nodeTranslation, $page);
 
+                $nodeTranslation->setTitle($page->getTitle());
+
                 $this->dispatchNodeEvent(Events::PRE_PERSIST, $node, $nodeTranslation, $nodeVersion, $page);
 
-                $nodeTranslation->setTitle($page->getTitle());
                 if ($page->isStructureNode()) {
                     $nodeTranslation->setSlug('');
                 }

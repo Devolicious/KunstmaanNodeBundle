@@ -32,29 +32,29 @@ class ActionsMenuBuilder
     /**
      * @var NodeVersion
      */
-    private $activeNodeVersion;
+    protected $activeNodeVersion;
 
     /**
      * @var EntityManager
      */
-    private $em;
+    protected $em;
 
     /**
      * @var RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    protected $dispatcher;
 
     /**
      * @var SecurityContextInterface
      */
-    private $context;
+    protected $context;
 
-    private $isEditableNode = true;
+    protected $isEditableNode = true;
 
 
     /**
