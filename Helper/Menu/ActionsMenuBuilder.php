@@ -118,7 +118,7 @@ class ActionsMenuBuilder
                     $isFirst = false;
                 }
                 if (empty($queuedNodeTranslationAction) && $this->context->isGranted(PermissionMap::PERMISSION_PUBLISH, $node)) {
-                    $menu->addChild('action.publish', array('linkAttributes' => array('type' => 'submit', 'class' => 'btn' . ($isFirst ? ' btn-primary' : ''), 'value' => 'saveandpublish', 'name' => 'saveandpublish'), 'extras' => array('renderType' => 'button')));
+                    $menu->addChild('action.publish', array('linkAttributes' => array('data-toggle' => 'modal', 'data-target' => '#pub', 'class' => 'btn' . ($isFirst ? ' btn-primary' : '')), 'extras' => array('renderType' => 'button')));
                 }
                 $menu->addChild('action.preview', array('uri' => $this->router->generate('_slug_preview', array('url' => $activeNodeTranslation->getUrl(), 'version' => $activeNodeVersion->getId())), 'linkAttributes' => array('target' => '_blank', 'class' => 'btn')));
             } else {
